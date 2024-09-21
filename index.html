@@ -35,15 +35,19 @@ podia esperar.</p>
             <button class="next-button" id="next-btn" onclick="nextVictim()">Próxima Vítima</button>
         </main>
     </div>
-
+         <!-- Div oculta para exibir a imagem e tocar o áudio -->
+    <div id="image-overlay">
+        <img id="victim-image" src="maria.jpg" alt="Imagem assustadora">
+        <audio id="background-audio" src="maria.mp3"></audio>
+    </div>
     <script>
         let currentVictim = 0;
 
         const victims = [
             {
                 name: "Vítima 1: Maria Silva",
-                story: "Maria Silva foi encontrada em um beco escuro, suas últimas horas foram envoltas em mistério. Testemunhas relataram sussurros ao longe antes do incidente."
-            },
+                story: "Maria Silva foi encontrada em um beco escuro, suas últimas horas foram envoltas em mistério. Testemunhas relataram sussurros ao longe antes do incidente.",
+                image:"maria.jpg" },
             {
                 name: "Vítima 2: João Oliveira",
                 story:"bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bal abla bla bala ala ala al ala ala ala ala ala aakanlabalaba."
@@ -59,13 +63,30 @@ podia esperar.</p>
         ];
 
         function nextVictim() {
-            currentVictim++;
-            if (currentVictim < victims.length) {
-                document.getElementById('victim-name').textContent = victims[currentVictim].name;
-                document.getElementById('victim-story').innerHTML = `<p>${victims[currentVictim].story}</p>`;
-            } else {
-                document.getElementById('next-btn').style.display = 'none'; // Esconde o botão quando todas as histórias forem exibidas
-            }
+            showImageWithSound(() => {
+                currentVictim++;
+                if (currentVictim < victims.length) {
+                    document.getElementById('victim-name').textContent = victims[currentVictim].name;
+                    document.getElementById('victim-story').innerHTML = `<p>${victims[currentVictim].story}</p>`;
+                    document.getElementById('victim-image').src = victims[currentVictim].image; // Atualiza a imagem para a próxima vítima
+                } else {
+                    document.getElementById('next-btn').style.display = 'none'; // Esconde o botão quando todas as histórias forem exibidas
+                }
+            });
+        }
+
+        function showImageWithSound(callback) {
+            const imageOverlay = document.getElementById('image-overlay');
+            const audio = document.getElementById('background-audio');
+            imageOverlay.style.display = 'flex';
+            audio.play();
+
+            setTimeout(() => {
+                imageOverlay.style.display = 'none';
+                audio.pause();
+                audio.currentTime = 0;
+                callback();
+            }, 5000); // Exibe por 5 segundos
         }
     </script>
 </body>
